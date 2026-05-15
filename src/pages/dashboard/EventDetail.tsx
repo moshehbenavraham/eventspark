@@ -15,12 +15,18 @@ import EventDetailHeader from "@/components/event-detail/EventDetailHeader";
 import EventQuickInfo from "@/components/event-detail/EventQuickInfo";
 import EventAttendeesTable from "@/components/event-detail/EventAttendeesTable";
 import EventQRCode from "@/components/event-detail/EventQRCode";
+import { useSeo } from "@/lib/seo";
 
 const EventDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data: event, isLoading } = useEvent(id);
   const { data: formFields } = useFormFields(id);
+  useSeo({
+    title: event?.name ? `${event.name} · Manage` : "Event",
+    path: id ? `/dashboard/events/${id}` : "/dashboard/events",
+    noindex: true,
+  });
   const updateEvent = useUpdateEvent();
   const deleteEvent = useDeleteEvent();
   const addField = useAddFormField();

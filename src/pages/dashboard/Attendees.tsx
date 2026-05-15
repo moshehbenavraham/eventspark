@@ -9,6 +9,7 @@ import { Search, Download, Loader2, ArrowUp, ArrowDown, ArrowUpDown, ChevronLeft
 import { useRegistrations, Registration } from "@/hooks/useRegistrations";
 import { useRegistrationStats } from "@/hooks/useRegistrations";
 import { format } from "date-fns";
+import { useSeo } from "@/lib/seo";
 
 const statusStyle: Record<string, string> = {
   registered: "bg-primary/10 text-primary border-0",
@@ -21,6 +22,7 @@ type SortDir = "asc" | "desc";
 const PAGE_SIZE = 15;
 
 const Attendees = () => {
+  useSeo({ title: "Attendees", path: "/dashboard/attendees", noindex: true });
   const [search, setSearch] = useState("");
   const [eventFilter, setEventFilter] = useState<string>("all");
   const [sortColumn, setSortColumn] = useState<SortColumn>("date");

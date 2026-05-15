@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { Logo } from "@/components/Logo";
 import { NavLink } from "@/components/NavLink";
+import { SkipLink } from "@/components/SkipLink";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
 import { Button } from "@/components/ui/button";
@@ -48,11 +49,12 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen flex flex-col w-full bg-background">
+      <SkipLink />
       <header className="h-14 flex items-center px-6 gap-4">
-        <Link to="/dashboard/events" className="mr-6 shrink-0">
+        <Link to="/dashboard/events" className="mr-6 shrink-0" aria-label="EventSpark dashboard home">
           <Logo size="sm" />
         </Link>
-        <div className="flex-1 flex items-center h-full overflow-x-auto">
+        <nav aria-label="Dashboard" className="flex-1 flex items-center h-full overflow-x-auto">
           <div className="flex items-center gap-1">
             {allItems.map((item) => (
               <NavLink
@@ -65,17 +67,17 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
               </NavLink>
             ))}
           </div>
-        </div>
+        </nav>
         <div className="flex items-center gap-3 shrink-0">
           {user && (
             <span className="text-xs text-muted-foreground hidden lg:block truncate max-w-[160px]">{user.email}</span>
           )}
-          <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground" onClick={handleSignOut}>
+          <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground" onClick={handleSignOut} aria-label="Sign out">
             <LogOut className="w-4 h-4" />
           </Button>
         </div>
       </header>
-      <main ref={mainRef} className="flex-1 p-4 sm:p-6 overflow-auto">{children}</main>
+      <main ref={mainRef} id="main" tabIndex={-1} className="flex-1 p-4 sm:p-6 overflow-auto focus:outline-none">{children}</main>
     </div>
   );
 }

@@ -8,9 +8,16 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { Logo } from "@/components/Logo";
+import { SkipLink } from "@/components/SkipLink";
 import { motion } from "framer-motion";
+import { useSeo } from "@/lib/seo";
 
 const Auth = () => {
+  useSeo({
+    title: "Sign in or sign up",
+    description: "Log in to your EventSpark account or create one in seconds to start building beautiful registration pages.",
+    path: "/auth",
+  });
   const navigate = useNavigate();
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -71,7 +78,9 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4 relative overflow-hidden">
+    <>
+      <SkipLink />
+      <main id="main" tabIndex={-1} className="min-h-screen bg-background flex flex-col items-center justify-center px-4 relative overflow-hidden focus:outline-none">
       {/* Subtle decorative shapes like the landing page confetti */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[10%] left-[8%] w-16 h-16 rounded-full bg-primary/10 blur-sm" />
@@ -229,7 +238,8 @@ const Auth = () => {
           By continuing, you agree to our Terms of Service and Privacy Policy.
         </p>
       </motion.div>
-    </div>
+      </main>
+    </>
   );
 };
 

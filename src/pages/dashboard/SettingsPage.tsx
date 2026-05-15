@@ -10,6 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { Loader2, Send, UserPlus, Plus, Trash2, Sun, Moon, Monitor, Copy, ExternalLink } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useSeo } from "@/lib/seo";
 
 const SOCIAL_PLATFORMS = [
   "Twitter / X", "LinkedIn", "Instagram", "Facebook", "YouTube", "TikTok", "GitHub",
@@ -22,6 +23,7 @@ function generateCompanySlug(name: string): string {
 }
 
 const SettingsPage = () => {
+  useSeo({ title: "Settings", path: "/dashboard/settings", noindex: true });
   const { theme, setTheme } = useTheme();
   const { user } = useAuth();
   const { data: profile, isLoading } = useProfile();

@@ -19,6 +19,7 @@ import { useProfile } from "@/hooks/useProfile";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSeo } from "@/lib/seo";
 
 const steps = [
   { number: 1, title: "Event Details", subtitle: "Name, date, location & description" },
@@ -79,6 +80,11 @@ const CreateEvent = () => {
   const isEditMode = !!editId;
   const { data: existingEvent, isLoading: eventLoading } = useEvent(isEditMode ? editId : undefined);
   const { data: existingFields, isLoading: fieldsLoading } = useFormFields(isEditMode ? editId : undefined);
+  useSeo({
+    title: isEditMode ? "Edit event" : "Create event",
+    path: isEditMode && editId ? `/dashboard/events/${editId}/edit` : "/dashboard/events/create",
+    noindex: true,
+  });
 
   const [step, setStep] = useState(1);
   const [name, setName] = useState("");

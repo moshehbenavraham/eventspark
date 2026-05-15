@@ -12,6 +12,7 @@ import { useCreateRegistration } from "@/hooks/useRegistrations";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { Tables } from "@/integrations/supabase/types";
+import { useSeo } from "@/lib/seo";
 
 type FormField = Tables<"form_fields">;
 
@@ -185,6 +186,16 @@ const Register = () => {
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [consent, setConsent] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  useSeo({
+    title: event?.name ? `Register · ${event.name}` : "Register",
+    description: event?.description
+      ? event.description.replace(/[*#_~`>]/g, "").slice(0, 180)
+      : "Register for an event hosted on EventSpark.",
+    path: slug ? `/register/${slug}` : "/register",
+    image: event?.background_image_url || undefined,
+    ogType: "event",
+  });
 
   const handleFieldChange = useCallback((label: string, value: string) => {
     setFormData(prev => ({ ...prev, [label]: value }));

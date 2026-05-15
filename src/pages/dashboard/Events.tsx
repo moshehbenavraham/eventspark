@@ -8,6 +8,7 @@ import { Plus, Search, CalendarDays, Users, Loader2, MapPin, ExternalLink, Layou
 import { useEvents } from "@/hooks/useEvents";
 import { useRegistrations } from "@/hooks/useRegistrations";
 import { format } from "date-fns";
+import { useSeo } from "@/lib/seo";
 
 const statusColors: Record<string, string> = {
   live: "bg-success text-success-foreground",
@@ -16,6 +17,7 @@ const statusColors: Record<string, string> = {
 };
 
 const Events = () => {
+  useSeo({ title: "Events", path: "/dashboard/events", noindex: true });
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");

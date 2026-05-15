@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { Logo } from "@/components/Logo";
+import { SkipLink } from "@/components/SkipLink";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSeo } from "@/lib/seo";
 import {
   Puzzle,
   ArrowRight,
@@ -298,6 +300,14 @@ function ConfettiLayer({ size, opacity, count, spread }: { size: number; opacity
 }
 
 const Landing = () => {
+  useSeo({
+    title: "EventSpark — Build events people actually want to attend",
+    isHome: true,
+    description:
+      "Build branded registration pages, track attendees, and grow your community. No code required. EventSpark is the modern event platform for workshops, hackathons, conferences, and meetups.",
+    path: "/",
+  });
+
   const [wordIndex, setWordIndex] = useState(0);
   const [navVisible, setNavVisible] = useState(false);
   const [devOpen, setDevOpen] = useState(false);
@@ -307,6 +317,10 @@ const Landing = () => {
   const [confettiCount, setConfettiCount] = useState(8);
   const [confettiSpread, setConfettiSpread] = useState(1.0);
   const [bentoStyle, setBentoStyle] = useState(0);
+
+  // Dev picker only renders in `vite dev` builds — gate side effects too so we
+  // don't walk the DOM on every titleWeight tick in production.
+  const isDevTools = import.meta.env.DEV;
 
   // Bento color presets
   const bentoPresets = [
@@ -346,15 +360,17 @@ const Landing = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Apply title weight globally
+  // Apply title weight globally — only when the dev picker is available.
   useEffect(() => {
+    if (!isDevTools) return;
     document.querySelectorAll<HTMLElement>("h1,h2,h3,h4,h5,h6,.font-display").forEach((el) => {
       el.style.fontWeight = String(titleWeight);
     });
-  }, [titleWeight]);
+  }, [titleWeight, isDevTools]);
 
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
+      <SkipLink />
       {/* Navbar — hidden until scroll */}
       <motion.nav
         className="fixed top-0 w-full z-50 bg-background/90 backdrop-blur-md"
@@ -377,6 +393,7 @@ const Landing = () => {
         </div>
       </motion.nav>
 
+      <main id="main" tabIndex={-1} className="focus:outline-none">
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20 lg:py-28">
@@ -788,15 +805,18 @@ const Landing = () => {
         </div>
       </section>
 
+      </main>
+
       {/* Footer */}
       <footer className="py-12 px-6 lg:px-8">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <Logo size="md" />
-          <p className="text-sm text-muted-foreground">© 2026 eventspark. All rights reserved.</p>
+          <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} eventspark. All rights reserved.</p>
         </div>
       </footer>
 
-      {/* Dev picker */}
+      {/* Dev picker — dev builds only */}
+      {isDevTools && (
       <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-[9999]">
         <button
           onClick={() => setDevOpen(!devOpen)}
@@ -867,6 +887,7 @@ const Landing = () => {
           </div>
         )}
       </div>
+      )}
     </div>
   );
 };

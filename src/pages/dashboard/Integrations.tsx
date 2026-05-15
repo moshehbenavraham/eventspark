@@ -7,6 +7,7 @@ import {
   FileEdit, BookOpen, MailOpen, UserSearch, Mic, Search, Database,
   ExternalLink,
 } from "lucide-react";
+import { useSeo } from "@/lib/seo";
 
 const connectors = [
   { id: "google_drive", name: "Google Drive", description: "Upload and download files to and from Google Drive", icon: HardDrive, category: "Storage" },
@@ -45,6 +46,7 @@ const categoryOrder = ["Productivity", "Communication", "Email", "Storage", "AI"
 const sortedCategories = categoryOrder.filter(c => grouped[c]);
 
 const Integrations = () => {
+  useSeo({ title: "Integrations", path: "/dashboard/integrations", noindex: true });
   const handleConnect = (name: string) => {
     toast.info(`To connect ${name}, configure its credentials in your integration provider and add them to your deployment environment.`, {
       duration: 6000,

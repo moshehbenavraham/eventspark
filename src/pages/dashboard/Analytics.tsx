@@ -5,8 +5,10 @@ import {
 import { useRegistrationStats } from "@/hooks/useRegistrations";
 import { useMemo } from "react";
 import { format, parseISO, startOfWeek } from "date-fns";
+import { useSeo } from "@/lib/seo";
 
 const Analytics = () => {
+  useSeo({ title: "Analytics", path: "/dashboard/analytics", noindex: true });
   const { data: stats, isLoading } = useRegistrationStats();
 
   const perEventData = useMemo(() => {

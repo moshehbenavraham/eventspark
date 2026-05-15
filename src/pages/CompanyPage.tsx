@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Calendar, MapPin, Users, Globe, ExternalLink, Mail, ArrowRight, LayoutGrid, List } from "lucide-react";
 import { format } from "date-fns";
+import { useSeo } from "@/lib/seo";
 
 const SOCIAL_LABELS: Record<string, string> = {
   "Twitter / X": "X",
@@ -26,6 +27,17 @@ const CompanyPage = () => {
   const eventIds = events?.map((e) => e.id) ?? [];
   const { data: regCounts } = usePublicRegistrationCounts(eventIds);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+
+  const companyName = company?.company || company?.full_name || "Company";
+  useSeo({
+    title: company ? `${companyName} on EventSpark` : "Company",
+    description: company?.company_description
+      ? company.company_description.slice(0, 180)
+      : `Upcoming and past events from ${companyName} on EventSpark.`,
+    path: companySlug ? `/company/${companySlug}` : "/company",
+    image: company?.avatar_url || undefined,
+    ogType: "profile",
+  });
 
   if (isLoading) {
     return (
