@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#E63E73" />
+    <meta name="theme-color" content="#E63E73" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#15131F" media="(prefers-color-scheme: dark)" />
     <meta name="color-scheme" content="light dark" />
 
     <title>EventSpark — Build events people actually want to attend</title>
@@ -64,15 +65,21 @@
 
     <!--
       Anti-FOUC theme bootstrap. The app uses next-themes with
-      storageKey="app-theme" and defaults to light, but the Settings page lets
-      users opt in to dark. Without this script the .dark class would flip on
-      *after* React hydrates, producing a light-mode flash for returning users.
+      storageKey="app-theme" and defaultTheme="system", and the Settings page
+      lets users pick Light / Dark / System. Without this script the .dark
+      class would flip on *after* React hydrates, producing a one-frame flash.
+      We match next-themes' resolution: explicit stored value wins, otherwise
+      fall back to the OS preference via prefers-color-scheme.
     -->
     <script>
       (function () {
         try {
           var stored = localStorage.getItem('app-theme');
-          var theme = stored === 'dark' ? 'dark' : 'light';
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var theme;
+          if (stored === 'dark') theme = 'dark';
+          else if (stored === 'light') theme = 'light';
+          else theme = prefersDark ? 'dark' : 'light'; // "system" or unset
           var root = document.documentElement;
           root.classList.toggle('dark', theme === 'dark');
           root.style.colorScheme = theme;

@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { Tables } from "@/integrations/supabase/types";
 import { useSeo } from "@/lib/seo";
+import { SkipLink } from "@/components/SkipLink";
 
 type FormField = Tables<"form_fields">;
 
@@ -203,22 +204,28 @@ const Register = () => {
 
   if (eventLoading || fieldsLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
+      <>
+        <SkipLink />
+        <main id="main" tabIndex={-1} className="min-h-screen flex items-center justify-center focus:outline-none">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" aria-label="Loading event" />
+        </main>
+      </>
     );
   }
 
   if (!event) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4">
-        <Card className="w-full max-w-md">
-          <CardContent className="p-8 text-center">
-            <h1 className="text-2xl font-display font-bold mb-2">Event Not Found</h1>
-            <p className="text-muted-foreground">This event may have ended or the link is invalid.</p>
-          </CardContent>
-        </Card>
-      </div>
+      <>
+        <SkipLink />
+        <main id="main" tabIndex={-1} className="min-h-screen flex items-center justify-center px-4 focus:outline-none">
+          <Card className="w-full max-w-md">
+            <CardContent className="p-8 text-center">
+              <h1 className="text-2xl font-display font-bold mb-2">Event Not Found</h1>
+              <p className="text-muted-foreground">This event may have ended or the link is invalid.</p>
+            </CardContent>
+          </Card>
+        </main>
+      </>
     );
   }
 
@@ -259,7 +266,10 @@ const Register = () => {
 
   const wrapDark = (content: React.ReactNode) => (
     <div className={isDark ? "dark" : ""}>
-      {content}
+      <SkipLink />
+      <main id="main" tabIndex={-1} className="focus:outline-none">
+        {content}
+      </main>
     </div>
   );
 

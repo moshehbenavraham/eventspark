@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Calendar, MapPin, Users, Globe, ExternalLink, Mail, ArrowRight, LayoutGrid, List } from "lucide-react";
 import { format } from "date-fns";
 import { useSeo } from "@/lib/seo";
+import { SkipLink } from "@/components/SkipLink";
 
 const SOCIAL_LABELS: Record<string, string> = {
   "Twitter / X": "X",
@@ -41,26 +42,32 @@ const CompanyPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background p-8">
-        <div className="max-w-6xl mx-auto space-y-8">
-          <Skeleton className="h-[300px] w-full rounded-2xl" />
-          <div className="grid grid-cols-3 gap-4">
-            {[1, 2, 3].map((i) => <Skeleton key={i} className="h-52 rounded-xl" />)}
+      <>
+        <SkipLink />
+        <main id="main" tabIndex={-1} className="min-h-screen bg-background p-8 focus:outline-none" aria-busy="true">
+          <div className="max-w-6xl mx-auto space-y-8">
+            <Skeleton className="h-[300px] w-full rounded-2xl" />
+            <div className="grid grid-cols-3 gap-4">
+              {[1, 2, 3].map((i) => <Skeleton key={i} className="h-52 rounded-xl" />)}
+            </div>
           </div>
-        </div>
-      </div>
+        </main>
+      </>
     );
   }
 
   if (error || !company) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold text-foreground">Company not found</h1>
-          <p className="text-muted-foreground">This company page doesn't exist or hasn't been set up yet.</p>
-          <Link to="/"><Button variant="outline">Go Home</Button></Link>
-        </div>
-      </div>
+      <>
+        <SkipLink />
+        <main id="main" tabIndex={-1} className="min-h-screen bg-background flex items-center justify-center focus:outline-none">
+          <div className="text-center space-y-4">
+            <h1 className="text-4xl font-bold text-foreground">Company not found</h1>
+            <p className="text-muted-foreground">This company page doesn't exist or hasn't been set up yet.</p>
+            <Link to="/"><Button variant="outline">Go Home</Button></Link>
+          </div>
+        </main>
+      </>
     );
   }
 
@@ -75,6 +82,8 @@ const CompanyPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SkipLink />
+      <main id="main" tabIndex={-1} className="focus:outline-none">
       {/* ========== HERO ========== */}
       <section className="relative pt-16 sm:pt-0">
         <div className="relative min-h-[360px] sm:h-[420px] overflow-hidden bg-gradient-to-br from-[hsl(var(--primary)/0.4)] via-[hsl(var(--primary)/0.15)] to-background">
@@ -188,6 +197,7 @@ const CompanyPage = () => {
           <p className="text-muted-foreground">Check back soon for upcoming events.</p>
         </div>
       )}
+      </main>
     </div>
   );
 };
